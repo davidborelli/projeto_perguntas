@@ -6,30 +6,47 @@ main() => runApp(PerguntaApp());
 
 class _PerguntaAppState extends State<PerguntaApp> {
   var _perguntaSelecionada = 0;
+  var _pontuacaoTotal = 0;
   final _perguntas = const [
     {
       'texto': 'Qual é a sua cor preferida?',
-      'respostas': ['Preto', 'Vermelho', 'Verde', 'Branco']
+      'respostas': [
+        {'texto': 'Preto', 'pontos': 10},
+        {'texto': 'Vermelho', 'pontos': 7},
+        {'texto': 'Verde', 'pontos': 5},
+        {'texto': 'Branco', 'pontos': 2},
+      ]
     },
     {
       'texto': 'Qual é o seu animal favorito?',
-      'respostas': ['Coelho', 'Cobra', 'Elefante', 'Leão']
+      'respostas': [
+        {'texto': 'Coelho', 'pontos': 9},
+        {'texto': 'Cobra', 'pontos': 5},
+        {'texto': 'Elefante', 'pontos': 7},
+        {'texto': 'Leão', 'pontos': 2},
+      ]
     },
     {
       'texto': 'Qual é o seu instrutor favorito?',
-      'respostas': ['Maria', 'João', 'Leo', 'Pedro']
+      'respostas': [
+        {'texto': 'Maria', 'pontos': 10},
+        {'texto': 'João', 'pontos': 8},
+        {'texto': 'Leo', 'pontos': 7},
+        {'texto': 'Pedro', 'pontos': 1},
+      ]
     }
   ];
 
-  void _responder() {
+  void _responder(int pontos) {
     if (temPerguntaSelecionada) {
       setState(() {
         _perguntaSelecionada++;
+        _pontuacaoTotal += pontos;
       });
     }
   }
 
-   bool get temPerguntaSelecionada {
+  bool get temPerguntaSelecionada {
     return _perguntaSelecionada < _perguntas.length;
   }
 
@@ -37,17 +54,16 @@ class _PerguntaAppState extends State<PerguntaApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Perguntas'),
-        ),
-        body: temPerguntaSelecionada
-            ? Questionario(
-              perguntaSelecionada: _perguntaSelecionada,
-              perguntas: _perguntas,
-              responder: _responder,
-            )
-            : Resultado()
-      ),
+          appBar: AppBar(
+            title: Text('Perguntas'),
+          ),
+          body: temPerguntaSelecionada
+              ? Questionario(
+                  perguntaSelecionada: _perguntaSelecionada,
+                  perguntas: _perguntas,
+                  quandoResponder: _responder,
+                )
+              : Resultado(_pontuacaoTotal)),
     );
   }
 }
